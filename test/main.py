@@ -20,8 +20,10 @@ def test_spotify():
     print(playlist.spotify_id)
     print(playlist.track_list)
     print(playlist.track_list[0].title)
+    client._search_for_track(playlist.track_list[0])
     #new_playlist = client.create_playlist(playlist
     # track = tidalfy_common.Track(track['al'])
+
 
 
 # Press the green button in the gutter to run the script.
