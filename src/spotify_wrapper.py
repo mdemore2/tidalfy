@@ -1,6 +1,6 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
-import tidalfy_common
+import src.tidalfy_common as tidalfy_common
 
 
 class SpotifyWrapper:
