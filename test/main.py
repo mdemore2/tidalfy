@@ -1,7 +1,4 @@
-import spotipy
-import tidalapi
-from spotify_wrapper import SpotifyWrapper
-import tidalfy_common
+from src.spotify_wrapper import SpotifyWrapper
 
 
 # This is a sample Python script.
