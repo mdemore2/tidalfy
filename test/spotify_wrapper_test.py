@@ -1,4 +1,9 @@
+import pytest
 from src.spotify_wrapper import SpotifyWrapper
+
+
+def test_get_playlist():
+    pass
 
 
 def test_spotify():
@@ -10,11 +15,9 @@ def test_spotify():
     print(playlist.track_list)
     print(playlist.track_list[0].title)
     client._search_for_track(playlist.track_list[0])
-    #new_playlist = client.create_playlist(playlist
+    # new_playlist = client.create_playlist(playlist
     # track = tidalfy_common.Track(track['al'])
-
 
 
 if __name__ == '__main__':
     test_spotify()
-

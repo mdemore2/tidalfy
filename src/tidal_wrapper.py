@@ -2,8 +2,8 @@ import tidalapi
 from src.tidalfy_common import Playlist, Track
 
 
-class TidalWrapper():
-    def __init__(self, username, password):
+class TidalWrapper:
+    def __init__(self):
         self._session = tidalapi.Session()
         # is there a way to do some of this without logging into tidal?
         self._session.login_oauth_simple()  # TODO: auto redirect/open new window

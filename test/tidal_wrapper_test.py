@@ -1,4 +1,10 @@
+import pytest
 from src.tidal_wrapper import TidalWrapper
+
+
+def test_get_playlist():
+    pass
+
 
 if __name__ == '__main__':
     wrapper = TidalWrapper()
