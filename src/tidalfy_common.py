@@ -6,10 +6,10 @@ class Track:
         self.spotify_id = spotify_id
         self.tidal_id = tidal_id
 
+
 class Playlist:
     def __init__(self, name: str, track_list: list, spotify_id: str = None, tidal_id: str = None):
         self.name = name
         self.track_list = track_list
         self.spotify_id = spotify_id
         self.tidal_id = tidal_id
-
