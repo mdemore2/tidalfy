@@ -29,19 +29,56 @@ class SpotifyWrapper:
 
         return common_playlist
 
-    def create_playlist(self, name: str, track_list: list) -> str: #spotify login needed to create playlist
-        playlist = self._client.user_playlist_create(self._user_id, name)
-        print(playlist)
-        uri_list = [x.spotify_id for x in track_list]
-        self._client.playlist_add_items(playlist['id'], uri_list)
+    def create_playlist(self, playlist: Playlist) -> Playlist: #spotify login needed to create playlist
+        """
+        create spotify playlist and populate with tracks
+        :param playlist: playlist object w/ name and track list
+        :return: playlist object w/ spotify_id for created playlist
+        """
+        playlist.spotify_id = self._client.user_playlist_create(self._user_id, playlist.name)['id']
+        # todo: may want to retrieve url for playlist here instead of creating later
+        print(playlist.spotify_id)
+        uri_list = [x.spotify_id for x in playlist.track_list]
+        self._client.playlist_add_items(playlist.spotify_id, uri_list)
 
-        return playlist['id'] #TODO: return URL
+        return playlist
 
     def _search_for_track(self, track: Track) -> Union[Track, None]:
         q = 'artist:' + track.artist + '+album:' + track.album + '+track:' + track.title
-        results = self._client.search(q, type='track') #TODO: add similarity func to compare results w/ track data
-        track.spotify_id = results['tracks']['items'][0]['id']
+        results = self._client.search(q, type='track')
+        track, match = self._check_results(results, track)
+        #track.spotify_id = results['tracks']['items'][0]['id']
         #print(results['tracks']['items'][0].keys())
-        print(f'TRACK ID: {track.spotify_id}')
-        print(f"SEARCHED_ID: {results['tracks']['items'][0]['id']}")
+        if match:
+            print(f'TRACK ID: {track.spotify_id}')
+            print(f"SEARCHED_ID: {results['tracks']['items'][0]['id']}")
+        else:
+            print(f"Unable to find track: {track.title}\nFirst result:{results['tracks']['items'][0]['name']} by {results['tracks']['items'][0]['artists'][0]}")
         return
+
+    def _check_results(self, results: list, track: Track) -> tuple(Track, bool):
+        max_score = 0
+        max_id = None
+        for result in results['tracks']['items']:
+            score = 0
+            if result['name'] == track.title:
+                score += 1
+            if result['artists'][0] == track.artist:
+                score += 3
+            if result['album']['name'] == track.album:
+                score += 5
+            if score > 8:
+                track.spotify_id = result['id']
+                return track, True
+            else:
+                if score > max_score:
+                    max_score = score
+                    max_id = result['id']
+        if max_score > 0:
+            track.spotify_id = max_id
+            return track, True
+        else:
+            return track, False
+
+
+

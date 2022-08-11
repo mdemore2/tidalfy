@@ -13,3 +13,4 @@ class Playlist:
         self.track_list = track_list
         self.spotify_id = spotify_id
         self.tidal_id = tidal_id
+
