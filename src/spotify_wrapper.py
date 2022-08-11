@@ -39,7 +39,10 @@ class SpotifyWrapper:
         playlist.spotify_id = self._client.user_playlist_create(self._user_id, playlist.name)['id']
         print(playlist.spotify_id)
         playlist = self._get_tracks(playlist)
-        uri_list = [x.spotify_id for x in playlist.track_list]
+        uri_list = []
+        for track in playlist.track_list:
+            if track.spotify_id:
+                uri_list.append(track.spotify_id)
         print(uri_list)
         self._client.playlist_add_items(playlist.spotify_id, uri_list)
 
@@ -96,7 +99,9 @@ class SpotifyWrapper:
                     max_score = score
                     max_id = result['id']
         if max_score > 0:
+            # todo: add logging for partial match
             track.spotify_id = max_id
             return track, True
         else:
+            # TODO: add logging for song not found
             return track, False

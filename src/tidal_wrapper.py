@@ -57,23 +57,24 @@ class TidalWrapper:
         #r = requests.get(f'https://listen.tidal.com/v1/playlists/{playlist.tidal_id}')
         #etag = r.headers['etag']
         for track in playlist.track_list:
-            tidal_add_track_url = (
-                    "https://listen.tidal.com/v1/playlists/"
-                    + str(playlist.tidal_id)
-                    + "/items"
-            )
-            print(f'Tidal Track_id:{track.tidal_id}')
-            r = requests.post(
-                tidal_add_track_url,
-                headers={'authorization': self._session.token_type + ' ' + self._session.access_token,
-                    'If-None-Match': '*'},
-                data={
-                    'onArtifactNotFound': 'SKIP',
-                    'onDupes': 'SKIP',
-                    "trackIds": track.tidal_id}
-            )
-            r.raise_for_status()
-            logging.getLogger(__name__).info("Added: %s - %s", track.artist, track.title)
+            if track.tidal_id:
+                tidal_add_track_url = (
+                        "https://listen.tidal.com/v1/playlists/"
+                        + str(playlist.tidal_id)
+                        + "/items"
+                )
+                print(f'Tidal Track_id:{track.tidal_id}')
+                r = requests.post(
+                    tidal_add_track_url,
+                    headers={'authorization': self._session.token_type + ' ' + self._session.access_token,
+                        'If-None-Match': '*'},
+                    data={
+                        'onArtifactNotFound': 'SKIP',
+                        'onDupes': 'SKIP',
+                        "trackIds": track.tidal_id}
+                )
+                r.raise_for_status()
+                logging.getLogger(__name__).info("Added: %s - %s", track.artist, track.title)
 
     def _create_playlist(self, playlist_name):  # func courtesy spotify2tidal
         """Create a tidal playlist and return its ID.
@@ -122,7 +123,9 @@ class TidalWrapper:
                     max_score = score
                     max_id = result.id
         if max_score > 0:
+            # TODO: add logging for partial match
             track.tidal_id = max_id
             return track, True
         else:
+            # TODO: add logging for song not found
             return track, False
