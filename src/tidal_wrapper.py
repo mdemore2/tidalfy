@@ -33,12 +33,12 @@ class TidalWrapper:
         playlist.tidal_id = self._create_playlist(playlist.name)
         playlist = self._get_tracks(playlist)
         self._add_tracks(playlist)
-        return playlist  # maybe return url here?
+        return playlist
 
     def _get_tracks(self, playlist: Playlist) -> Playlist:
         """
         add spotify id's to tracks in Playlist obj
-        :param Playlist:
+        :param playlist:
         :return:
         """
         updated_track_list = []
@@ -54,8 +54,7 @@ class TidalWrapper:
         return track
 
     def _add_tracks(self, playlist: Playlist) -> None:
-        #r = requests.get(f'https://listen.tidal.com/v1/playlists/{playlist.tidal_id}')
-        #etag = r.headers['etag']
+
         for track in playlist.track_list:
             if track.tidal_id:
                 tidal_add_track_url = (
@@ -67,7 +66,7 @@ class TidalWrapper:
                 r = requests.post(
                     tidal_add_track_url,
                     headers={'authorization': self._session.token_type + ' ' + self._session.access_token,
-                        'If-None-Match': '*'},
+                             'If-None-Match': '*'},
                     data={
                         'onArtifactNotFound': 'SKIP',
                         'onDupes': 'SKIP',
@@ -93,7 +92,6 @@ class TidalWrapper:
         r = requests.post(
             tidal_create_playlist_url,
             data={"title": playlist_name, "description": ""},
-            #headers={"x-tidal-sessionid": self._session.session_id}
             headers={'authorization': self._session.token_type + ' ' + self._session.access_token}
         )
         print(r.raise_for_status())

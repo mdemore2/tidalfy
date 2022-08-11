@@ -1,9 +1,7 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 from src.tidalfy_common import Track, Playlist
-import src.tidalfy_common as tidalfy_common
 from typing import Union
-import urllib.parse
 
 
 class SpotifyWrapper:
@@ -51,7 +49,7 @@ class SpotifyWrapper:
     def _get_tracks(self, playlist: Playlist) -> Playlist:
         """
         add spotify id's to tracks in Playlist obj
-        :param Playlist:
+        :param playlist:
         :return:
         """
         updated_track_list = []
@@ -67,14 +65,6 @@ class SpotifyWrapper:
         track, match = self._check_results(results, track)
 
         return track
-        # track.spotify_id = results['tracks']['items'][0]['id']
-        # print(results['tracks']['items'][0].keys())
-        # if match:
-        #    print(f'TRACK ID: {track.spotify_id}')
-        #    print(f"SEARCHED_ID: {results['tracks']['items'][0]['id']}")
-        # else:
-        #    print(f"Unable to find track: {track.title}\nFirst result:{results['tracks']['items'][0]['name']} by {results['tracks']['items'][0]['artists'][0]}")
-        # return
 
     def _check_results(self, results, track: Track) -> tuple:
         max_score = 0
