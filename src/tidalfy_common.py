@@ -14,3 +14,9 @@ class Playlist:
         self.spotify_id = spotify_id
         self.tidal_id = tidal_id
 
+    def get_spotify_url(self) -> str:
+        return f'https://open.spotify.com/playlist/{self.spotify_id}'
+
+    def get_tidal_url(self) -> str:
+        return f'https://listen.tidal.com/playlist/{self.tidal_id}'
+
