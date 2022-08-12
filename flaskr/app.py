@@ -3,7 +3,8 @@ from src.tidal_wrapper import TidalWrapper
 from flask import Flask, render_template, redirect, url_for, request, session
 import webbrowser
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='static')
+app.secret_key = 'deez nutz'
 
 
 def copy_to_tidal(tidal: TidalWrapper, spotify: SpotifyWrapper, url: str) -> str:
@@ -26,8 +27,8 @@ def index():
     """
     if request.method == 'POST':
         session['playlist_url'] = request.form['playlist_url']
-        return redirect(url_for('/link'))
-    return render_template('static/index.html')
+        return redirect(url_for('copy'))
+    return render_template('index.html')
 
 
 @app.route('/copy')
@@ -38,12 +39,13 @@ def copy():
     """
     tidal = TidalWrapper()
     spotify = SpotifyWrapper()
-    webbrowser.open(tidal.login_url)
+    print(tidal.login_url)
+    webbrowser.open(f'https://{tidal.login_url}')
     try:
         tidal.login_future.result()
     except Exception as e:
         # unable to complete login
-        return redirect(url_for('/'))
+        return redirect(url_for('index'))
     if 'spotify' in session['playlist_url']:
         new_playlist_url = copy_to_tidal(tidal, spotify, session['playlist_url'])
     else:
@@ -60,3 +62,6 @@ def status():
     :return:
     """
     return
+
+if __name__ =="__main__":
+    app.run()
