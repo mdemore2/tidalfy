@@ -3,7 +3,7 @@ from src.tidal_wrapper import TidalWrapper
 from flask import Flask, render_template, redirect, url_for, request, session
 import webbrowser
 
-app = Flask(__name__, template_folder='static')
+app = Flask(__name__)
 app.secret_key = 'deez nutz'
 
 
