@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}TIDALFY -- Copy Playlists Between Platforms{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <article class="output">
+      <header>
+        <div>
+          <h1>New Playlist</h1>
+        </div>
+      </header>
+      <p class="body">{{ new_playlist_url }}</p>
+  </article>
+{% endblock %}

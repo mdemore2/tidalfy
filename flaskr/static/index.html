@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}TIDALFY -- Copy Playlists Between Platforms{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="playlist_url">Playlist URL</label>
+    <input name="playlist_url" id="playlist_url" required>
+    <input type="submit" value="Copy Playlist">
+  </form>
+{% endblock %}

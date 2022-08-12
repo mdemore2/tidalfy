@@ -1,6 +1,7 @@
 import logging
 import requests
 import tidalapi
+import concurrent.futures
 from typing import Union
 from src.tidalfy_common import Playlist, Track
 
@@ -9,7 +10,9 @@ class TidalWrapper:
     def __init__(self):
         self._session = tidalapi.Session()
         # is there a way to do some of this without logging into tidal?
-        self._session.login_oauth_simple()  # TODO: auto redirect/open new window
+        login, future = self._session.login_oauth()  # TODO: auto redirect/open new window
+        self.login_url = login.verification_uri_complete
+        self.login_future = future
 
     def get_playlist(self, url: str) -> Playlist:
         tidal_playlist_id = url.split('/')[-1]
