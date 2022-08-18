@@ -1,7 +1,10 @@
+import urllib.parse
+
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 from src.tidalfy_common import Track, Playlist
 from typing import Union
+import time
 
 
 class SpotifyWrapper:
@@ -60,10 +63,20 @@ class SpotifyWrapper:
 
     def _search_for_track(self, track: Track) -> Union[Track, None]:
         q = 'artist:' + track.artist + ' album:' + track.album + ' track:' + track.title
+        q_url = 'https://api.spotify.com/v1/search?q=' + q
+        q_url = urllib.parse.quote_plus(q)
+        if len(q_url) > 100:
+            q = 'artist:' + track.artist + ' track:' + track.title
+            q_url = 'https://api.spotify.com/v1/search?q=' + q
+            q_url = urllib.parse.quote_plus(q)
+            if len(q_url) > 100:
+                q = 'track:' + track.title
+
         print(q)
         results = self._client.search(q, type='track')
         track, match = self._check_results(results, track)
-
+        # TODO: failing on Courtney Barnett Write A List of THings to Look Forward To
+        # spotify returning 404 not found on search
         return track
 
     def _check_results(self, results, track: Track) -> tuple:
