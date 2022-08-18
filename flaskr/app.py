@@ -1,10 +1,11 @@
+import logging
 from src.spotify_wrapper import SpotifyWrapper
 from src.tidal_wrapper import TidalWrapper
 from flask import Flask, render_template, redirect, url_for, request, session
 import webbrowser
 
 app = Flask(__name__)
-app.secret_key = 'deez nutz'
+app.secret_key = 'secret'
 
 
 def copy_to_tidal(tidal: TidalWrapper, spotify: SpotifyWrapper, url: str) -> str:
@@ -63,5 +64,7 @@ def status():
     """
     return
 
-if __name__ =="__main__":
+
+if __name__ == "__main__":
+    logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=logging.INFO)
     app.run()

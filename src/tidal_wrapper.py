@@ -50,7 +50,7 @@ class TidalWrapper:
         playlist.track_list = updated_track_list
         return playlist
 
-    def _search_for_track(self, track: Track) -> Union[Track, None]:
+    def _search_for_track(self, track: Track) -> Union[Track, None]: #TODO: address multiple artists
         results = self._session.search(field="track", value=track.title).tracks
         track, match = self._check_results(results, track)
 

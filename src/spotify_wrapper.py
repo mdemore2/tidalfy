@@ -75,8 +75,6 @@ class SpotifyWrapper:
         print(q)
         results = self._client.search(q, type='track')
         track, match = self._check_results(results, track)
-        # TODO: failing on Courtney Barnett Write A List of THings to Look Forward To
-        # spotify returning 404 not found on search
         return track
 
     def _check_results(self, results, track: Track) -> tuple:
