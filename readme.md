@@ -2,6 +2,11 @@
 
 Flask app to copy playlists between Spotify and Tidal
 
+## Testing Locally
+
+from tidalfy directory:
+python -m flaskr.app
+
 ## TODO
 
 - automate spotify auth
