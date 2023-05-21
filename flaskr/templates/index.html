@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}TIDALFY -- Copy Playlists Between Platforms{% endblock %}</h1>
+  <h1>{% block title %}TIDALFY{% endblock %}</h1>
+    <h3>Copy Playlists Between Platforms</h3>
 {% endblock %}
 
 {% block content %}
   <form method="post">
-    <label for="playlist_url">Playlist URL</label>
-    <input name="playlist_url" id="playlist_url" required>
-    <input type="submit" value="Copy Playlist">
+    <label for="playlist_url">Playlist URL:</label>
+    <input type="url" name="playlist_url" id="playlist_url" required>
+    <input type="submit" name="copy" value="Copy Playlist">
   </form>
 {% endblock %}

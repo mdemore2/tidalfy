@@ -8,16 +8,16 @@ app = Flask(__name__)
 app.secret_key = 'secret'
 
 
-def copy_to_tidal(tidal: TidalWrapper, spotify: SpotifyWrapper, url: str) -> str:
+def copy_to_tidal(tidal: TidalWrapper, spotify: SpotifyWrapper, url: str) -> tuple:
     playlist = spotify.get_playlist(url)
     playlist = tidal.create_playlist(playlist)
-    return playlist.get_tidal_url()
+    return playlist.get_tidal_url(), playlist.name
 
 
-def copy_to_spotify(tidal: TidalWrapper, spotify: SpotifyWrapper, url: str) -> str:
+def copy_to_spotify(tidal: TidalWrapper, spotify: SpotifyWrapper, url: str) -> tuple:
     playlist = tidal.get_playlist(url)
     playlist = spotify.create_playlist(playlist)
-    return playlist.get_spotify_url()
+    return playlist.get_spotify_url(), playlist.name
 
 
 @app.route('/', methods=('GET', 'POST'))
@@ -48,12 +48,12 @@ def copy():
         # unable to complete login
         return redirect(url_for('index'))
     if 'spotify' in session['playlist_url']:
-        new_playlist_url = copy_to_tidal(tidal, spotify, session['playlist_url'])
+        new_playlist_url, playlist_title = copy_to_tidal(tidal, spotify, session['playlist_url'])
     else:
-        new_playlist_url = copy_to_spotify(tidal, spotify, session['playlist_url'])
+        new_playlist_url, playlist_title = copy_to_spotify(tidal, spotify, session['playlist_url'])
     webbrowser.open(new_playlist_url)
     # return redirect(url_for('/work'))
-    return render_template('copy.html', new_playlist_url=new_playlist_url)
+    return render_template('copy.html', new_playlist_url=new_playlist_url, playlist_title=playlist_title)
 
 
 @app.route('/status')
