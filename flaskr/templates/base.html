@@ -9,7 +9,12 @@
     {% block header %}{% endblock %}
   </header>
   {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
+    <dialog class="flash" open>
+      <p>{{ message }}</p>
+      <form method="dialog">
+        <button>OK</button>
+      </form>
+    </dialog>
   {% endfor %}
   {% block content %}{% endblock %}
 </section>
