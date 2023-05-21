@@ -4,6 +4,7 @@ import tidalapi
 import concurrent.futures
 from typing import Union
 from src.tidalfy_common import Playlist, Track
+from celery import Task
 
 
 class TidalWrapper:
@@ -32,10 +33,13 @@ class TidalWrapper:
 
         return common_playlist
 
-    def create_playlist(self, playlist: Playlist) -> Playlist:
+    def create_playlist(self, playlist: Playlist, task: Task) -> Playlist:
         playlist.tidal_id = self._create_playlist(playlist.name)
+        task.update_state(state='SEARCHING',
+                          meta={'current': 0, 'total': 0,
+                                'status': 'Searching for matching tracks...'})
         playlist = self._get_tracks(playlist)
-        self._add_tracks(playlist)
+        self._add_tracks(playlist, task)
         return playlist
 
     def _get_tracks(self, playlist: Playlist) -> Playlist:
@@ -56,9 +60,17 @@ class TidalWrapper:
 
         return track
 
-    def _add_tracks(self, playlist: Playlist) -> None:
-
+    def _add_tracks(self, playlist: Playlist, task:Task) -> None:
+        task.update_state(state='ADDING',
+                          meta={'current': 0, 'total': len(playlist.track_list),
+                                'status': 'Adding tracks to playlist...'})
+        count = 0
         for track in playlist.track_list:
+            count += 1
+            if count % 5 == 0:
+                task.update_state(state='ADDING',
+                          meta={'current': count, 'total':  len(playlist.track_list),
+                                'status': 'Adding tracks to playlist...'})
             if track.tidal_id:
                 tidal_add_track_url = (
                         "https://listen.tidal.com/v1/playlists/"
