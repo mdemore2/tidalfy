@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}TIDALFY{% endblock %}</h1>
+    <h3>Copy Playlists Between Platforms</h3>
+{% endblock %}
+
+<script src="{{ url_for('static', filename='nanobar.min.js') }}"></script>
+<script src="{{ url_for('static', filename='status.js') }}"></script>
+
+
+{% block content %}
+  <div class="progress">
+  </div>
+{% endblock %}
