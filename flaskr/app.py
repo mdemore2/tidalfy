@@ -3,6 +3,9 @@ from src.spotify_wrapper import SpotifyWrapper
 from src.tidal_wrapper import TidalWrapper
 from flask import Flask, render_template, redirect, url_for, request, session, flash, get_flashed_messages
 import webbrowser
+from dotenv import load_dotenv, dotenv_values
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = 'secret'
